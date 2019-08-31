@@ -24,7 +24,7 @@ import Time
 import Url exposing (Url)
 import Username exposing (Username)
 import Viewer exposing (Viewer)
-
+import WebAudioFont
 
 
 -- NOTE: Based on discussions around how asset management features
