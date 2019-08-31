@@ -23,7 +23,9 @@ import Time
 import Url.Builder
 import Username exposing (Username)
 
-
+import Mousikea.Midi.MEvent as Perf exposing (Performance)
+import Scale.Base as Scale exposing (basic)
+import WebAudioFont
 
 -- MODEL
 
@@ -101,15 +103,10 @@ view model =
                         case model.feed of
                             Loaded feed ->
                                 [ div [ class "feed-toggle" ] <|
-                                    List.concat
-                                        [ [ viewTabs
-                                                (Session.cred model.session)
-                                                model.feedTab
-                                          ]
-                                        , Feed.viewArticles model.timeZone feed
-                                            |> List.map (Html.map GotFeedMsg)
-                                        , [ Feed.viewPagination ClickedFeedPage model.feedPage feed ]
-                                        ]
+                                    [ text "Hello Compiano!"
+                                    , button [ onClick ClickedPlayDo ] [ text "Play C" ]
+                                    , button [ onClick ClickedStop ] [ text "Stop" ]
+                                    ]
                                 ]
 
                             Loading ->
@@ -238,6 +235,8 @@ type Msg
     | GotFeedMsg Feed.Msg
     | GotSession Session
     | PassedSlowLoadThreshold
+    | ClickedPlayDo
+    | ClickedStop
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -327,6 +326,13 @@ update msg model =
                             other
             in
             ( { model | feed = feed, tags = tags }, Cmd.none )
+
+        ClickedPlayDo ->
+            ( model, ( Scale.basic |> Perf.performNote1 |> WebAudioFont.queueWavTable ) )
+
+        ClickedStop ->
+            ( model, WebAudioFont.stop () )
+
 
 
 
